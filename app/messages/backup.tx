@@ -4,7 +4,6 @@ import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { serverTimestamp } from 'firebase/firestore';
 import { FIRESTORE_COL, FIREBASE_AUTH } from "../../lib/firebase"
 import { query, orderBy, limit, addDoc } from "firebase/firestore";
-import '../globals.css';
 
 import firebase from "firebase/compat/app";
 
@@ -45,7 +44,7 @@ export default function Messages() {
     //         uid: uid,
     //     }).then(() => setFormValue(''))
     // })
-    const autoScroll = useRef<HTMLDivElement>(null);
+
     useEffect(() => {
         const addMessageForm = document.querySelector('.add');
 
@@ -65,10 +64,7 @@ export default function Messages() {
                 photoURL: photoURL,
                 text: formValue,
                 uid: uid,
-            }).then(() => {
-                setFormValue('')
-                autoScroll.current?.scrollIntoView({ behavior: "smooth" });
-            })
+            }).then(() => setFormValue(''))
         };
 
         addMessageForm?.addEventListener('submit', handleSubmit);
@@ -78,59 +74,32 @@ export default function Messages() {
         };
     }, [formValue]);
 
-
-
     return (
-        <main>
-            <div className="text-white">
-                {messages && messages.map((msg) => <ChatMessage key={msg.id} message={msg} />)}
+        <>
+            <div className="text-red-400">
+                {messages && messages.map(msg => <ChatMessage key={msg.id} message={msg} />)}
             </div>
-            <div ref={autoScroll} className="invisible pt-8 mb-3">to fix a bug and </div>
-            <div className="fixed bottom-0 left-0 w-full p-4 bg-gray-800">
-                <form className="add">
-                    <div className="flex justify-between items-center">
-                        <input
-                            type="text"
-                            className="px-4 py-2 rounded-lg bg-white text-black w-3/4"
-                            placeholder="Enter your message"
-                            value={formValue}
-                            onChange={(e) => setFormValue(e.target.value)}
-                        />
-                        <button className="px-4 py-2 rounded-lg bg-blue-500 text-white" type="submit">
-                            Submit
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </main>
+            <form className="add">
+                <input
+                    type="text"
+                    placeholder="Enter your message"
+                    value={formValue}
+                    onChange={(e) => setFormValue(e.target.value)}
+                />
+                <button type="submit">Add Message</button>
+            </form>
+        </>
     );
 }
 function ChatMessage(props: any) {
     const { text, uid, photoURL, id } = props.message;
 
+
     const messageClass = uid === FIREBASE_AUTH.currentUser?.uid;
     return (
-        <div>
-            {messageClass ?
-                <div className="flex items-center justify-end">
-                    <div>
-                        <p className="font-bold text-lg">Username</p>
-                        <p>{text}</p>
-                    </div>
-                    <div className="ml-4">
-                        <img src={photoURL} alt="Your Profile" className="w-24 h-24 rounded-full" />
-                    </div>
-                </div>
-                :
-                <div className="flex items-center">
-                    <div className="mr-4">
-                        <img src={photoURL} alt="User Profile" className="w-24 h-24 rounded-full" />
-                    </div>
-                    <div>
-                        <p className="font-bold text-lg">Username</p>
-                        <p>{text}</p>
-                    </div>
-                </div>}
+        <div key={id}>
+            <img className="rounded-full w-16 h-16" src={photoURL} alt="User Avatar" />
+            {messageClass ? <p >Your msg: {text}</p> : <p>Incomming msg: {text}</p>}
         </div>
     );
 }
