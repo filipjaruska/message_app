@@ -15,7 +15,10 @@ export default function SignInButton() {
         <>
             {user
                 ?
-                <img className="rounded-full w-8 h-8 mr-2" src={photoURL} alt="User Avatar" />
+                <Link href="/dashboard">
+                    <img className="rounded-full w-8 h-8 mr-2" src={photoURL} alt="User Avatar" />
+                </Link>
+
                 :
                 <Link href="/auth">
                     <p className="inline-block border border-indigo-800 rounded py-2 px-4 bg-indigo-700 hover:border-indigo-500 hover:bg-indigo-300 text-white">

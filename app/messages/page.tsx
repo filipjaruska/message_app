@@ -6,45 +6,12 @@ import { FIRESTORE_COL, FIREBASE_AUTH } from "../../lib/firebase"
 import { query, orderBy, limit, addDoc } from "firebase/firestore";
 import '../globals.css';
 
-import firebase from "firebase/compat/app";
-
 export default function Messages() {
-    /*
-    let messages: any[] = []
-
-    getDocs(FIRESTORE_COL).then((snapshot) => {
-        snapshot.docs.forEach((doc) => {
-            messages.push({ ...doc.data(), id: doc.id })
-        })
-        console.log(messages)
-    }).catch(err => {
-        console.log(err.message)
-    })
-
-    onSnapshot(FIRESTORE_COL, (snapshot) => {
-        snapshot.docs.forEach((doc) => {
-            messages.push({ ...doc.data(), id: doc.id })
-        })
-        console.log(messages)
-    })
-*/
     const q = query(FIRESTORE_COL, orderBy("createAt"), limit(25));
     const [messages] = useCollectionData(q)
     //submiting a message
     const [formValue, setFormValue] = useState('');
 
-    // const addMessage = document.querySelector('.add');
-    // addMessage?.addEventListener('submit', (e) => {
-    //     e.preventDefault();
-    //     let uid = FIREBASE_AUTH.currentUser?.uid;
-    //     let photoURL = FIREBASE_AUTH.currentUser?.photoURL;
-    //     addDoc(FIRESTORE_COL, {
-    //         createAt: serverTimestamp(),
-    //         photoURL: photoURL,
-    //         text: formValue,
-    //         uid: uid,
-    //     }).then(() => setFormValue(''))
-    // })
     const autoScroll = useRef<HTMLDivElement>(null);
     useEffect(() => {
         const addMessageForm = document.querySelector('.add');
@@ -53,6 +20,8 @@ export default function Messages() {
             e.preventDefault();
             let uid = FIREBASE_AUTH.currentUser?.uid;
             let photoURL = FIREBASE_AUTH.currentUser?.photoURL;
+            let emailUser = FIREBASE_AUTH.currentUser?.email;
+            let username = emailUser?.split('@')!;
 
             if (uid === undefined) { //delete
                 uid = "temporary";
@@ -65,6 +34,7 @@ export default function Messages() {
                 photoURL: photoURL,
                 text: formValue,
                 uid: uid,
+                username: username[0],
             }).then(() => {
                 setFormValue('')
                 autoScroll.current?.scrollIntoView({ behavior: "smooth" });
@@ -106,7 +76,7 @@ export default function Messages() {
     );
 }
 function ChatMessage(props: any) {
-    const { text, uid, photoURL, id } = props.message;
+    const { text, uid, photoURL, id, username } = props.message;
 
     const messageClass = uid === FIREBASE_AUTH.currentUser?.uid;
     return (
@@ -114,7 +84,7 @@ function ChatMessage(props: any) {
             {messageClass ?
                 <div className="flex items-center justify-end">
                     <div>
-                        <p className="font-bold text-lg">Username</p>
+                        <p className="font-bold text-lg">{username}</p>
                         <p>{text}</p>
                     </div>
                     <div className="ml-4">
@@ -127,7 +97,7 @@ function ChatMessage(props: any) {
                         <img src={photoURL} alt="User Profile" className="w-24 h-24 rounded-full" />
                     </div>
                     <div>
-                        <p className="font-bold text-lg">Username</p>
+                        <p className="font-bold text-lg">{username}</p>
                         <p>{text}</p>
                     </div>
                 </div>}
