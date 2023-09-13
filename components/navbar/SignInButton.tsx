@@ -22,7 +22,7 @@ export default function SignInButton() {
                 :
                 <Link href="/auth">
                     <p className="inline-block border border-indigo-800 rounded py-2 px-4 bg-indigo-700 hover:border-indigo-500 hover:bg-indigo-300 text-white">
-                        Sign In
+                        Přihlásit se
                     </p>
                 </Link>
             }

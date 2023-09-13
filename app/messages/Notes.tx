@@ -1,0 +1,26 @@
+getDocs(firestore_collection) is used to retrieve documents from a Firestore collection.
+It takes one argument, a reference to the Firestore collection.
+Retrieves the data from the Firestore collection ONCE and DOES NOT listen for real-time updates.
+It fetches the data at the moment the function is called.
+    
+    getDocs(firestore_collection).then((snapshot) => {
+        snapshot.docs.forEach((doc) => {
+            messages.push({ ...doc.data(), id: doc.id })
+        })
+        console.log(messages)
+    }).catch(err => {
+        console.log(err.message)
+    })
+
+
+onSnapshot(firestore_collection, callback) sets up a real-time listener on the collection.
+The callback function is called whenever there are changes to the data in the collection. 
+    
+    onSnapshot(firestore_collection, (snapshot) => {
+        snapshot.docs.forEach((doc) => {
+            messages.push({ ...doc.data(), id: doc.id })
+        })
+        console.log(messages)
+    }).catch(err => {
+        console.log(err.message)
+    })

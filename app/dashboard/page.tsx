@@ -1,5 +1,10 @@
 import React from "react";
 import SignoutButton from "../../components/dashboard/SignoutButton";
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'Message App',
+}
 
 export default function Auth() {
     return (

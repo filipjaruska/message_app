@@ -10,7 +10,7 @@ export default function Navbar() {
                 <li className="mr-3">
                     <Link href={"/"}>
                         <p className="inline-block rounded hover:border-indigo-500  hover:bg-indigo-300 py-2 px-4">
-                            Home
+                            Domov
                         </p>
                     </Link>
                 </li>

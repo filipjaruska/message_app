@@ -7,12 +7,12 @@ import {getFirestore, collection, getDocs} from 'firebase/firestore';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyB4nCDqe-DUE56ajzGka2Hwn9lwYQrTHzc",
-  authDomain: "msgapp-proper.firebaseapp.com",
-  projectId: "msgapp-proper",
-  storageBucket: "msgapp-proper.appspot.com",
-  messagingSenderId: "87241770824",
-  appId: "1:87241770824:web:8a2556ade1ee0397e9557d",
+  apiKey: ,
+  authDomain: ,
+  projectId: ,
+  storageBucket: ,
+  messagingSenderId: ,
+  appId: ,
 };
 
 // Initialize Firebase

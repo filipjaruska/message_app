@@ -2,38 +2,36 @@
 import React, { useState } from "react";
 import { FIREBASE_AUTH } from "../../lib/firebase";
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "@firebase/auth";
-import Link from "next/link";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 function CustomSignInUp() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState<string | null>(null);
     const auth = FIREBASE_AUTH;
 
-    const signIn = async () => {
+    const handleSignInUp = async (action: 'signin' | 'signup') => {
         try {
-            const response = await signInWithEmailAndPassword(auth, email, password);
+            if (action === 'signin') {
+                await signInWithEmailAndPassword(auth, email, password);
+            } else {
+                await createUserWithEmailAndPassword(auth, email, password);
+            }
             setEmail('');
             setPassword('');
-        } catch (error) {
-            console.log(error);
+        } catch (error: any) {
+            setError(error.message);
         }
     }
 
-    const signUp = async () => {
-        try {
-            const response = await createUserWithEmailAndPassword(auth, email, password);
-            setEmail('');
-            setPassword('');
-        } catch (error) {
-            console.log(error);
-        }
+    if (error === 'Firebase: Error (auth/invalid-email).') {
+        setError('Nesprávné jméno nebo heslo!');
     }
     const [user] = useAuthState(FIREBASE_AUTH);
     return (
         <>
             {user ? null : <>
-                <div className="text-center text-4xl font-medium">Authentication</div>
+                <div className="text-center text-4xl font-medium">Přihlásit</div>
                 <div
                     className="w-full transform border-b-2 bg-transparent text-lg duration-300 focus-within:border-indigo-500 space-y-6"
                 >
@@ -41,7 +39,7 @@ function CustomSignInUp() {
                         type="text"
                         placeholder="Email"
                         onChange={(e) => setEmail(e.target.value)}
-                        value={email} // Set the value attribute to maintain state
+                        value={email}
                         className="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none"
                     />
                 </div>
@@ -51,25 +49,26 @@ function CustomSignInUp() {
                     <input
                         type="password"
                         onChange={(e) => setPassword(e.target.value)}
-                        value={password} // Set the value attribute to maintain state
-                        placeholder="Password"
+                        value={password}
+                        placeholder="Heslo"
                         className="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none"
                     />
                 </div>
+                {error && <div className="text-red-500 py-2 font-bold flex items-center justify-center">{error}</div>}
                 <button
                     className="w-full transform rounded-lg bg-indigo-600 py-2 font-bold duration-300 hover:bg-indigo-400 flex items-center justify-center"
                     type='button'
-                    onClick={signIn}
+                    onClick={() => handleSignInUp('signin')}
                 >
-                    Sign In
+                    Přihlásit se
                 </button>
                 <button
                     className="w-full transform rounded-lg bg-indigo-600 py-2 font-bold duration-300 hover:bg-indigo-400 flex items-center justify-center"
                     type='button'
 
-                    onClick={signUp}
+                    onClick={() => handleSignInUp('signup')}
                 >
-                    Sign Up
+                    Zaregistrovat se
                 </button>
             </>}
 

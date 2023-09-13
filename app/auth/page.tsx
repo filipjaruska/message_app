@@ -2,8 +2,10 @@ import React from "react";
 import CustomSignInUp from "../../components/auth/CustomSignInUp";
 import GoogleSign from "../../components/auth/GoogleSign";
 import RedirectToMessages from "../../components/auth/RedirectToMessages";
-
-//metadata
+import { Metadata } from 'next';
+export const metadata: Metadata = {
+    title: 'Message App',
+}
 
 export default function Auth() {
     return (
